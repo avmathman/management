@@ -45,6 +45,14 @@ dependencies {
 	runtimeOnly "com.mysql:mysql-connector-j:${mysqlJdbcDriverVersion}"
 	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+
+	// Annotation processors:
+	implementation("org.mapstruct:mapstruct:$mapStructVersion")
+	compileOnly("org.mapstruct:mapstruct-processor:$mapStructVersion")
+	annotationProcessor(
+			"org.projectlombok:lombok:$lombokVersion",
+			"org.mapstruct:mapstruct-processor:$mapStructVersion"
+	)
 }
 
 tasks.named('test') {
