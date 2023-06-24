@@ -22,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Users REST API controller with representing methods.
+ */
 @RestController
 @RequestMapping(
         path = "${management.api.prefix:}" + ManagementApiLocations.USER,
