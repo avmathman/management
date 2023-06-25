@@ -22,9 +22,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 /**
  * Users REST API controller with representing methods.
  */
+@Api(tags = {"User"})
 @RestController
 @RequestMapping(
         path = "${management.api.prefix:}" + ManagementApiLocations.USER,
@@ -38,6 +43,7 @@ public class UsersRestController {
 
     /**
      * Initializes a new {@link UsersRestController} instance.
+     *
      * @param userService - {@link UserService} instance.
      * @param userCreateDtoMapper - {@link UserCreateDtoMapper} instance.
      * @param userReadDtoMapper - {@link UserReadDtoMapper} instance.
@@ -56,55 +62,92 @@ public class UsersRestController {
         this.userUpdateDtoMapper = userUpdateDtoMapper;
     }
 
+    /**
+     * REST API method to create a new user.
+     *
+     * @param user - The user to create.
+     * @return The created user instance.
+     */
+    @ApiOperation(value = "Create new user")
     @RequestMapping(
             path = "",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserReadDto> createUser(@RequestBody UserCreateDto user) {
+    public ResponseEntity<UserReadDto> createUser(
+            @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user) {
         final UserReadDto createdUser = this.userReadDtoMapper
                 .modelToDto(this.userService.createUser(this.userCreateDtoMapper.dtoToModel(user)));
 
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
+    /**
+     * REST API method to modify a user.
+     *
+     * @param user - The user to be modified.
+     * @return The modified user instance.
+     */
+    @ApiOperation(value = "Modify a user")
     @RequestMapping(
             path = "",
             method = RequestMethod.PUT,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserReadDto> updateUser(@RequestBody UserUpdateDto user) {
+    public ResponseEntity<UserReadDto> updateUser(
+            @ApiParam(value = "The user JSON", required = true) @RequestBody UserUpdateDto user) {
         final UserReadDto updatedUser = this.userReadDtoMapper
                 .modelToDto(this.userService.updateUser(this.userUpdateDtoMapper.dtoToModel(user)));
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
+    /**
+     * REST API method to delete the specified user.
+     *
+     * @param userId The ID of the user to delete.
+     */
+    @ApiOperation(value = "Delete user")
     @RequestMapping(
             path = "",
             method = RequestMethod.DELETE
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity deleteUser(@PathVariable("userId") String userId) {
+    public ResponseEntity deleteUser(
+            @ApiParam(value = "The user identifier", required = true) @PathVariable("userId") String userId) {
         this.userService.deleteUser(Long.parseLong(userId));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    /**
+     * REST API method to retrieve user by it's ID.
+     *
+     * @param userId - The user ID.
+     * @return the user instance.
+     */
+    @ApiOperation(value = "Get user by ID")
     @RequestMapping(
             path = "",
             method = RequestMethod.GET
     )
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserReadDto> getUser(@PathVariable("userId") String userId) {
+    public ResponseEntity<UserReadDto> getUser(
+            @ApiParam(value = "The user identifier", required = true) @PathVariable("userId") String userId) {
         Long uId = Long.parseLong(userId);
         final UserReadDto currentUser = this.userReadDtoMapper.modelToDto(this.userService.getUser(uId));
 
         return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 
+    /**
+     * REST API method to retrieve list of users.
+     *
+     * @return The list of user instances.
+     */
+    @ApiOperation(value = "Get list of users")
     @RequestMapping(
             path = "/all",
             method = RequestMethod.GET

@@ -27,8 +27,8 @@ public class SwaggerConfiguration {
                 .forCodeGeneration(true)
                 .apiInfo(apiInfo())
                 .select()
-                .paths(regex(apiPrefix + "/v1/.*"))
-                .apis(RequestHandlerSelectors.basePackage("com.springtutorial"))
+                .paths(regex(apiPrefix + "/.*"))
+                .apis(RequestHandlerSelectors.basePackage("com.invent.management"))
                 .build();
     }
 
