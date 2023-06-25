@@ -33,26 +33,39 @@ configurations {
 	}
 }
 
+sourceCompatibility = 17
+targetCompatibility = 17
+
 repositories {
 	mavenCentral()
 }
 
 dependencies {
+
+	// Spring dependencies:
 	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
 	implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
 	implementation "org.hibernate.validator:hibernate-validator:8.0.0.Final"
-	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+
+	// Persistence dependencies:
 	runtimeOnly "com.mysql:mysql-connector-j:${mysqlJdbcDriverVersion}"
-	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
+
+	// Tools, utilities and annotation processor dependencies
+	implementation('io.springfox:springfox-swagger2:2.9.2')
+	implementation('io.springfox:springfox-swagger-ui:2.9.2')
+	implementation('commons-validator:commons-validator:1.6')
 
 	// Annotation processors:
 	implementation("org.mapstruct:mapstruct:$mapStructVersion")
 	compileOnly("org.mapstruct:mapstruct-processor:$mapStructVersion")
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
 	annotationProcessor(
 			"org.projectlombok:lombok:$lombokVersion",
 			"org.mapstruct:mapstruct-processor:$mapStructVersion"
 	)
+
+	// Test dependencies
+	testImplementation "org.springframework.boot:spring-boot-starter-test:${springBootVersion}"
 }
 
 tasks.named('test') {

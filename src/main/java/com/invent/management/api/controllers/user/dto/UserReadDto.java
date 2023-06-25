@@ -1,6 +1,6 @@
 package com.invent.management.api.controllers.user.dto;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 /**
  * The DTO with available fields for reading user.
