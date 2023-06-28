@@ -13,6 +13,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * API global advice.
+ */
 @Slf4j
 @RestControllerAdvice
 public class ApiControllerAdvice extends ResponseEntityExceptionHandler {
