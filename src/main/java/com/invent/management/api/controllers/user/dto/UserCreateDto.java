@@ -36,4 +36,16 @@ public class UserCreateDto {
      */
     @ApiModelProperty(value = "The user's indicator whether active or not", example = "true", required = true)
     private boolean enabled;
+
+    /**
+     * Is user enabled in system.
+     */
+    @ApiModelProperty(value = "The user's password", example = "password", required = true)
+    private String password;
+
+    /**
+     * Is user enabled in system.
+     */
+    @ApiModelProperty(value = "The user's roles", example = "ADMIN,USER", required = true)
+    private String roles;
 }
