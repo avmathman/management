@@ -115,7 +115,7 @@ public class UsersRestController {
             method = RequestMethod.DELETE
     )
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity deleteUser(
+    public ResponseEntity<Void> deleteUser(
             @ApiParam(value = "The user identifier", required = true) @PathVariable("userId") String userId) {
         this.userService.deleteUser(Long.parseLong(userId));
 
