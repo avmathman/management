@@ -10,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,6 +39,7 @@ public class UserEntity {
      * The date when the user entry was created.
      */
     @Column(name = "created_at")
+    @CreationTimestamp
     @NotNull
     private Timestamp createdAt;
 
@@ -43,6 +47,8 @@ public class UserEntity {
      * The date when the user entry was modified.
      */
     @Column(name = "modified_at")
+    @UpdateTimestamp
+    @NotNull
     private Timestamp modifiedAt;
 
     /**

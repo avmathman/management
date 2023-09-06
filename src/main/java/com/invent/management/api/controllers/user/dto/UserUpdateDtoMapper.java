@@ -18,7 +18,6 @@ public interface UserUpdateDtoMapper extends DtoMapper<UserUpdateDto, UserModel>
      * @param dto - The dto object.
      * @return The model object.
      */
-    @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "modifiedAt", ignore = true)
     UserModel dtoToModel(UserUpdateDto dto);
