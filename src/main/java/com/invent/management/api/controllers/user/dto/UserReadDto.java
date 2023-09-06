@@ -56,4 +56,10 @@ public class UserReadDto {
      */
     @ApiModelProperty(value = "The user's indicator whether active or not", example = "true")
     private boolean enabled;
+
+    /**
+     * Is user enabled in system.
+     */
+    @ApiModelProperty(value = "The user's roles", example = "ADMIN,USER")
+    private String roles;
 }
