@@ -11,7 +11,7 @@ public class SampleController {
         return "Welcome";
     }
 
-    @GetMapping("/user")
+    @GetMapping("/temp")
     public String user() {
         return "Welcome USER";
     }
