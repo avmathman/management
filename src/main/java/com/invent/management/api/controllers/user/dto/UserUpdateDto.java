@@ -34,7 +34,7 @@ public class UserUpdateDto {
     /**
      * The user lastname.
      */
-    @ApiModelProperty(value = "The user lastname", example = "Doe", readOnly = true)
+    @ApiModelProperty(value = "The user lastname", example = "Doe", required = true)
     @NotNull(message = "User lastname must be set")
     @Size(min = 1, max = 256, message = "User lastname length should be between 1 and 256 characters")
     private String lastname;

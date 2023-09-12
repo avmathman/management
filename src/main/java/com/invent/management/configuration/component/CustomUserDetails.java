@@ -23,12 +23,10 @@ public class CustomUserDetails implements UserDetails {
     public CustomUserDetails(UserEntity user) {
         this.username = user.getEmail();
         this.password = user.getPassword();
-        this.enabled = user.isEnabled();
-        List<GrantedAuthority> temp = Arrays.stream(user.getRoles().split(","))
+        this.enabled = user.isEnabled(); 
+        this.authorities = Arrays.stream(user.getRoles().split(","))
                                 .map(item -> new SimpleGrantedAuthority("ROLE_" + item))
                                 .collect(Collectors.toList());
-
-        this.authorities = temp;
     }
 
     @Override
