@@ -3,10 +3,16 @@ package com.invent.management.api.controllers.user.dto;
 import java.sql.Timestamp;
 
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  * The DTO with available fields for reading user.
  */
+@Getter
+@Setter
+@NoArgsConstructor
 public class UserReadDto {
 
     /**

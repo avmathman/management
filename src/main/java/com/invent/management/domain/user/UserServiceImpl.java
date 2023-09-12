@@ -1,5 +1,6 @@
 package com.invent.management.domain.user;
 
+import com.invent.management.data.user.UserEntity;
 import com.invent.management.data.user.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +40,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserModel updateUser(UserModel userModel) {
-        return this.userModelMapper.entityToModel(this.repository.save(this.userModelMapper.modelToEntity(userModel)));
+    public UserModel updateUser(UserModel user) {
+        UserEntity current = this.repository.getReferenceById(user.getId());
+
+        current.setFirstname(user.getFirstname());
+        current.setLastname(user.getLastname());
+        current.setEnabled(user.isEnabled());
+
+        return this.userModelMapper.entityToModel(this.repository.save(current));
     }
 
     @Override
