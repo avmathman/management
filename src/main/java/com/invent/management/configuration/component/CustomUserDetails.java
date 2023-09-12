@@ -25,7 +25,7 @@ public class CustomUserDetails implements UserDetails {
         this.password = user.getPassword();
         this.enabled = user.isEnabled();
         List<GrantedAuthority> temp = Arrays.stream(user.getRoles().split(","))
-                                .map(SimpleGrantedAuthority::new)
+                                .map(item -> new SimpleGrantedAuthority("ROLE_" + item))
                                 .collect(Collectors.toList());
 
         this.authorities = temp;
