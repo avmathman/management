@@ -46,6 +46,7 @@ public class UserServiceImpl implements UserService {
         current.setFirstname(user.getFirstname());
         current.setLastname(user.getLastname());
         current.setEnabled(user.isEnabled());
+        current.setPassword(user.getPassword());
 
         return this.userModelMapper.entityToModel(this.repository.save(current));
     }

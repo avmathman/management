@@ -68,9 +68,16 @@ public class UserEntity {
     /**
      * The user e-mail address.
      */
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     @NotNull
     private String email;
+
+    /**
+     * The user password.
+     */
+    @Column(name = "password")
+    @NotNull
+    private String password;
 
     /**
      * Is user enabled in system.
@@ -78,4 +85,6 @@ public class UserEntity {
     @Column(name = "enabled")
     @NotNull
     private boolean enabled;
+
+    private String roles;
 }

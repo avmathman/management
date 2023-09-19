@@ -48,4 +48,14 @@ public class UserModel {
      * Is user enabled in system.
      */
     private boolean enabled;
+
+    /**
+     * The user password.
+     */
+    private String password;
+
+    /**
+     * The user roles.
+     */
+    private String roles;
 }

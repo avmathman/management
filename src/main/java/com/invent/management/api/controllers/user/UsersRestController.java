@@ -79,8 +79,10 @@ public class UsersRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserReadDto> createUser(
             @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user) {
-        final UserReadDto createdUser = this.userReadDtoMapper
-                .modelToDto(this.userService.createUser(this.userCreateDtoMapper.dtoToModel(user)));
+
+        final UserModel userModel = this.userService.createUser(this.userCreateDtoMapper.dtoToModel(user));
+        
+        final UserReadDto createdUser = this.userReadDtoMapper.modelToDto(this.userService.createUser(userModel));
 
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
