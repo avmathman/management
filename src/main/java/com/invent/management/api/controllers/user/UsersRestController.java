@@ -111,7 +111,7 @@ public class UsersRestController {
     /**
      * REST API method to delete the specified user.
      *
-     * @param userId The ID of the user to delete.
+     * @param id The ID of the user to delete.
      */
     @ApiOperation(value = "Delete user")
     @RequestMapping(
@@ -129,7 +129,7 @@ public class UsersRestController {
     /**
      * REST API method to retrieve user by it's ID.
      *
-     * @param userId - The user ID.
+     * @param id - The user ID.
      * @return the user instance.
      */
     @ApiOperation(value = "Get user by ID")

@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.invent.management.domain.role.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
@@ -34,6 +35,9 @@ public class UserServiceImplTest {
 
     private UserModelMapper userModelMapper;
 
+    @Mock
+    private RoleService roleService;
+
     private UserService service;
 
     private UserEntity userEntity;
@@ -43,8 +47,9 @@ public class UserServiceImplTest {
         cleanAll();
         userRepository = mock(UserRepository.class);
         userModelMapper = Mappers.getMapper(UserModelMapper.class);
+        roleService = mock(RoleService.class);
 
-        service = new UserServiceImpl(userRepository, userModelMapper);
+        service = new UserServiceImpl(userRepository, userModelMapper, roleService);
 
         userEntity = this.createUserEntity(userEntity -> userEntity.setFirstname("First"));
     }

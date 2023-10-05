@@ -1,6 +1,7 @@
 package com.invent.management.api.controllers.user.dto;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -60,6 +61,6 @@ public class UserReadDto {
     /**
      * Is user enabled in system.
      */
-    @ApiModelProperty(value = "The user's roles", example = "ADMIN,USER")
-    private String roles;
+    @ApiModelProperty(value = "The user's roles", example = "[\"ADMIN\", \"USER\"]")
+    private List<String> roles;
 }

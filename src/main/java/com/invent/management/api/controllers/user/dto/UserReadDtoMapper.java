@@ -19,6 +19,7 @@ public interface UserReadDtoMapper extends DtoMapper<UserReadDto, UserModel> {
      * @return The model object.
      */
     @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "password", ignore = true)
     UserModel dtoToModel(UserReadDto dto);
 
     /**

@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 /**
  * The DTO with available fields for creating user.
  */
@@ -53,7 +55,7 @@ public class UserCreateDto {
     /**
      * Is user enabled in system.
      */
-    @ApiModelProperty(value = "The user's roles", example = "ADMIN,USER", required = true)
+    @ApiModelProperty(value = "The user's roles", example = "[\"ADMIN\", \"USER\"]", required = true)
     @NotNull(message = "User role(s) must be set")
-    private String roles;
+    private List<String> roles;
 }
