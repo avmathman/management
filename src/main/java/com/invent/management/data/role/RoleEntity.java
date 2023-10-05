@@ -1,11 +1,6 @@
 package com.invent.management.data.role;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
@@ -33,7 +28,7 @@ public class RoleEntity {
     /**
      * The role name.
      */
-    @Column(name = "name")
+    @Column(name = "name", unique = true)
     @NotNull
     private String name;
 }

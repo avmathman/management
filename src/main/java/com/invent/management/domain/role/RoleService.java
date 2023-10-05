@@ -2,6 +2,9 @@ package com.invent.management.domain.role;
 
 import java.util.List;
 
+import com.invent.management.domain.exception.DuplicateItemException;
+import com.invent.management.domain.exception.ItemNotFoundException;
+
 /**
  * Provides methods for working with roles.
  */
@@ -19,6 +22,7 @@ public interface RoleService {
      *
      * @param roleModel - The role to be update in database.
      * @return Updated role model.
+     * @throws ItemNotFoundException if user with the given id does not exist in database.
      */
     RoleModel updateRole(RoleModel roleModel);
 
@@ -26,6 +30,7 @@ public interface RoleService {
      * Removes role with given ID.
      *
      * @param roleId - The role ID.
+     * @throws ItemNotFoundException if user with the given id does not exist in database.
      */
     void deleteRole(Long roleId);
 
@@ -34,6 +39,7 @@ public interface RoleService {
      *
      * @param roleId - ID of the role to get.
      * @return The role specified by ID or null if no roles found.
+     * @throws ItemNotFoundException if user with the given id does not exist in database.
      */
     RoleModel getRole(Long roleId);
 
@@ -43,4 +49,12 @@ public interface RoleService {
      * @return The list of roles.
      */
     List<RoleModel> getAllRoles();
+
+    /**
+     * Checks whether role(s) exist.
+     *
+     * @param roles - An array of roles
+     * @throws DuplicateItemException if role with the same name already exists in database.
+     */
+    void checkMissingRoles(List<String> roles);
 }

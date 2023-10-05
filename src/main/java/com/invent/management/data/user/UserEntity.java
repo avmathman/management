@@ -86,5 +86,9 @@ public class UserEntity {
     @NotNull
     private boolean enabled;
 
+    /**
+     * The user roles.
+     */
+    @Column(name = "roles")
     private String roles;
 }

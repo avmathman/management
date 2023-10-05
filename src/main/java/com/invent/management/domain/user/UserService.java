@@ -2,6 +2,8 @@ package com.invent.management.domain.user;
 
 import java.util.List;
 
+import com.invent.management.domain.exception.ItemNotFoundException;
+
 /**
  * Provides methods for working with users.
  */
@@ -20,6 +22,7 @@ public interface UserService {
      *
      * @param userModel - The user to be update in database.
      * @return Updated user model.
+     * @throws ItemNotFoundException if user with the given id does not exist in database.
      */
     UserModel updateUser(UserModel userModel);
 
@@ -35,6 +38,7 @@ public interface UserService {
      *
      * @param userId - ID of the user to get.
      * @return The user specified by ID or null if no users found.
+     * @throws ItemNotFoundException if user with the given id does not exist in database.
      */
     UserModel getUser(Long userId);
 
@@ -42,6 +46,7 @@ public interface UserService {
      * Returns all users.
      *
      * @return The list of users.
+     * @throws ItemNotFoundException if user with the given id does not exist in database.
      */
     List<UserModel> getAllUsers();
 }
