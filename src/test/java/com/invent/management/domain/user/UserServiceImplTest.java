@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.doNothing;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -60,6 +61,7 @@ public class UserServiceImplTest {
         //Assign
         UserModel userModel = this.userModelMapper.entityToModel(this.userEntity);
         when(userRepository.save(any(UserEntity.class))).thenReturn(this.userEntity);
+        doNothing().when(roleService).checkMissingRoles(userModel.getRoles());
 
         //Act
         UserModel current = service.createUser(userModel);
@@ -78,7 +80,7 @@ public class UserServiceImplTest {
         
         //Assign
         UserModel userModel = this.userModelMapper.entityToModel(this.userEntity);
-        when(userRepository.getReferenceById(anyLong())).thenReturn(this.userEntity);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.ofNullable(this.userEntity));
         when(userRepository.save(any(UserEntity.class))).thenReturn(this.userEntity);
 
         //Act
@@ -97,7 +99,7 @@ public class UserServiceImplTest {
     public void deleteUser_deletesUserInDB_returnsUserModel() {
         
         //Assign
-        when(userRepository.getById(this.userEntity.getId())).thenReturn(null);
+        when(userRepository.findById(this.userEntity.getId())).thenReturn(Optional.ofNullable(this.userEntity));
 
         //Act
         service.deleteUser(this.userEntity.getId());
