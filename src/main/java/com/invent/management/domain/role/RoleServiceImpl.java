@@ -98,7 +98,8 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
-    private void checkRole(String role) {
+    @Override
+    public void checkRole(String role) {
         List<String> existing = this.getAllRoles()
                 .stream()
                 .map(item -> item.getName())

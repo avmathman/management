@@ -82,7 +82,7 @@ public class RolesRestController {
 
         final RoleModel roleModel = this.roleService.createRole(this.roleCreateDtoMapper.dtoToModel(role));
         
-        final RoleReadDto createdRole = this.roleReadDtoMapper.modelToDto(this.roleService.createRole(roleModel));
+        final RoleReadDto createdRole = this.roleReadDtoMapper.modelToDto(roleModel);
 
         return new ResponseEntity<>(createdRole, HttpStatus.CREATED);
     }

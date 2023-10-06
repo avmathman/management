@@ -57,4 +57,12 @@ public interface RoleService {
      * @throws DuplicateItemException if role with the same name already exists in database.
      */
     void checkMissingRoles(List<String> roles);
+
+    /**
+     * Checks whether role exist.
+     *
+     * @param role - A role to be checked
+     * @throws DuplicateItemException if role with the same name already exists in database.
+     */
+    void checkRole(String role);
 }

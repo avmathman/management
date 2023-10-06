@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-class ApiErrorResponse {
+public class ApiErrorResponse {
 
     /**
      * Creates new instance of API error response
