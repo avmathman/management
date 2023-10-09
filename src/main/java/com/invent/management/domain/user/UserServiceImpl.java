@@ -5,6 +5,7 @@ import com.invent.management.data.user.UserRepository;
 
 import com.invent.management.domain.exception.ItemNotFoundException;
 import com.invent.management.domain.role.RoleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import java.util.Objects;
  * Implements business logic for working with user models.
  */
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
@@ -42,7 +44,8 @@ public class UserServiceImpl implements UserService {
             return this.userModelMapper.entityToModel(
                     this.repository.save(this.userModelMapper.modelToEntity(userModel)));
         } catch(DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException(Objects.requireNonNull(e.getMessage()));
+            log.error("Failed to save user with user email: {} due to {}", userModel.getEmail(), e.getMessage(), e);
+            throw new DataIntegrityViolationException("Given email to create already exist. email = " + userModel.getEmail());
         }
     }
 
@@ -56,10 +59,17 @@ public class UserServiceImpl implements UserService {
 
         current.setFirstname(user.getFirstname());
         current.setLastname(user.getLastname());
+        current.setEmail(user.getEmail());
         current.setEnabled(user.isEnabled());
         current.setPassword(user.getPassword());
 
-        return this.userModelMapper.entityToModel(this.repository.save(current));
+        try{
+            return this.userModelMapper.entityToModel(this.repository.save(current));
+        } catch(DataIntegrityViolationException e) {
+            log.error("Failed to update user with user email: {} due to {}", user.getEmail(), e.getMessage(), e);
+            throw new DataIntegrityViolationException("Given email to update already exist. email = " + user.getEmail());
+        }
+
     }
 
     @Override
