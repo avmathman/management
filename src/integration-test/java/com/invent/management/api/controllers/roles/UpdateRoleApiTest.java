@@ -48,7 +48,7 @@ public class UpdateRoleApiTest {
     }
 
     @Test
-    public void updateRole_createNewRole_returnNewRole() throws Exception {
+    public void updateRole_updatesExistingRole_returnRole() throws Exception {
 
         //Assign
         RoleCreateDto dto = this.roleUtils.createDefaultRoleCreateDto();
@@ -73,7 +73,7 @@ public class UpdateRoleApiTest {
     }
 
     @Test
-    public void updateRole_duplicateRoleName_throwsItemNotFoundException() throws Exception {
+    public void updateRole_passNotExistingRoleId_throwsItemNotFoundException() throws Exception {
 
         //Assign
         RoleUpdateDto dto = this.roleUtils.createDefaultRoleUpdateDto();

@@ -94,7 +94,7 @@ public class RoleServiceImpl implements RoleService {
         }
 
         if (missing.size() > 0) {
-            throw new DuplicateItemException("There no roles in database. Incorrect roles: " + missing);
+            throw new ItemNotFoundException("There no roles in database. Incorrect roles: " + missing);
         }
     }
 
