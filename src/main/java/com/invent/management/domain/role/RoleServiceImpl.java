@@ -3,6 +3,7 @@ package com.invent.management.domain.role;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.invent.management.domain.exception.DuplicateItemException;
@@ -31,30 +32,29 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public RoleModel createRole(RoleModel roleModel) {
-
-        this.checkRole(roleModel.getName());
-
         try {
             roleModel.setName(roleModel.getName().toUpperCase());
             return this.mapper.entityToModel(
                     this.repository.save(this.mapper.modelToEntity(roleModel)));
         } catch(DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException(Objects.requireNonNull(e.getMessage()));
+            throw new DataIntegrityViolationException("Given role name to create already exist in database. role = " + roleModel.getName());
         }
     }
 
     @Override
     public RoleModel updateRole(RoleModel roleModel) {
-        this.repository
+        RoleEntity current = this.repository
                 .findById(roleModel.getId())
                 .orElseThrow(() -> new ItemNotFoundException("Role with given id=" + roleModel.getId() + " does not exist!"));
 
         roleModel.setName(roleModel.getName().toUpperCase());
-        RoleEntity current = this.repository.getReferenceById(roleModel.getId());
-
         current.setName(roleModel.getName());
 
-        return this.mapper.entityToModel(this.repository.save(current));
+        try {
+            return this.mapper.entityToModel(this.repository.save(current));
+        } catch(DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Given role name to update already exist in database. role = " + roleModel.getName());
+        }
     }
 
     @Override

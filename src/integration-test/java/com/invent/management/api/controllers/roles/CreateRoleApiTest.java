@@ -6,7 +6,6 @@ import com.invent.management.api.ManagementApiLocations;
 import com.invent.management.api.advices.ApiErrorResponse;
 import com.invent.management.api.controllers.roles.dto.RoleCreateDto;
 import com.invent.management.api.controllers.roles.dto.RoleReadDto;
-import com.invent.management.domain.exception.ItemNotFoundException;
 import com.invent.management.domain.role.RoleModel;
 import com.invent.management.domain.role.RoleService;
 import com.invent.management.utils.RoleUtils;
@@ -14,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -72,11 +72,11 @@ public class CreateRoleApiTest {
     }
 
     @Test
-    public void createRole_duplicateRoleName_throwsItemNotFoundException() throws Exception {
+    public void createRole_duplicateRoleName_throwsDataIntegrityViolationException() throws Exception {
 
         //Assign
         RoleCreateDto dto = this.roleUtils.createDefaultRoleCreateDto();
-        when(roleService.createRole(any())).thenThrow(ItemNotFoundException.class);
+        when(roleService.createRole(any())).thenThrow(DataIntegrityViolationException.class);
 
         //Act
         String response = this.mockMvc.perform(post(ROLE_API_URL).secure(false)
@@ -89,6 +89,6 @@ public class CreateRoleApiTest {
         ApiErrorResponse error = objectMapper.readValue(response, ApiErrorResponse.class);
 
         //Assert
-        assertThat(error.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+        assertThat(error.getStatus()).isEqualTo(HttpStatus.CONFLICT);
     }
 }

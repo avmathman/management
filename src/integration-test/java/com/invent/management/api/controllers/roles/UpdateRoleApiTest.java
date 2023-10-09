@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -91,5 +92,26 @@ public class UpdateRoleApiTest {
 
         //Assert
         assertThat(error.getStatus()).isEqualTo(HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void updateRole_passExistingRoleName_throwsDataIntegrityViolationException() throws Exception {
+
+        //Assign
+        RoleUpdateDto dto = this.roleUtils.createDefaultRoleUpdateDto();
+        when(roleService.updateRole(any())).thenThrow(DataIntegrityViolationException.class);
+
+        //Act
+        String response = this.mockMvc.perform(put(ROLE_API_URL).secure(false)
+                        .contentType("application/json")
+                        .content(objectMapper.writeValueAsString(dto)))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ApiErrorResponse error = objectMapper.readValue(response, ApiErrorResponse.class);
+
+        //Assert
+        assertThat(error.getStatus()).isEqualTo(HttpStatus.CONFLICT);
     }
 }
