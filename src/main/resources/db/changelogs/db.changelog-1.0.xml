@@ -1,0 +1,54 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+        logicalFilePath="src/main/resources/db/changelogs/db.changelog-1.0.xml">
+
+    <changeSet id="create-roles-table" author="Abdurashid Vakhobov" context="schema">
+        <createTable tableName="roles">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_roles" nullable="false" />
+            </column>
+            <column name="name" type="varchar(${nameLength})">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+
+        <addUniqueConstraint columnNames="name" tableName="roles" constraintName="uidx_roles_name" />
+
+        <rollback>
+            <dropUniqueConstraint tableName="roles"
+                                  constraintName="uidx_roles_name"
+                                  uniqueColumns="name"/>
+            <dropTable tableName="roles" />
+        </rollback>
+    </changeSet>
+
+    <changeSet id="create-users-table" author="Abdurashid Vakhobov" context="schema">
+        <createTable tableName="users">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="pk_users" nullable="false" />
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="${now}" />
+            <column name="modified_at" type="TIMESTAMP" />
+            <column name="firstname" type="varchar(${nameLength})" />
+            <column name="lastname" type="varchar(${nameLength})" />
+            <column name="email" type="varchar(${nameLength})">
+                <constraints nullable="false" />
+            </column>
+            <column name="password" type="varchar(${nameLength})" />
+            <column name="roles" type="varchar(${nameLength})" />
+        </createTable>
+
+        <addUniqueConstraint columnNames="email" tableName="users" constraintName="uidx_users_email" />
+
+        <rollback>
+            <dropUniqueConstraint tableName="users"
+                                  constraintName="uidx_users_email"
+                                  uniqueColumns="email"/>
+            <dropTable tableName="users" />
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

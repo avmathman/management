@@ -11,7 +11,6 @@ import lombok.Setter;
  * The entity of the application role for a user.
  */
 @Entity
-@Table(name = "roles")
 @Getter
 @Setter
 @NoArgsConstructor
