@@ -39,6 +39,7 @@
                 <constraints nullable="false" />
             </column>
             <column name="password" type="varchar(${nameLength})" />
+            <column name="enabled" type="boolean" />
             <column name="roles" type="varchar(${nameLength})" />
         </createTable>
 

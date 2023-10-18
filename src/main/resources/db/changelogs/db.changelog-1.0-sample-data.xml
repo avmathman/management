@@ -1,0 +1,29 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
+        logicalFilePath="src/main/resources/db/changelogs/db.changelog-1.0-sample-data.xml">
+
+    <changeSet id="av/sample-data-roles" author="Abdurashid Vakhobov" context="sample-data">
+        <insert tableName="roles">
+            <column name="name" value="ADMIN" />
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="USER" />
+        </insert>
+    </changeSet>
+    <changeSet id="av/sample-data-users" author="Abdurashid Vakhobov" context="sample-data">
+        <insert tableName="users">
+            <column name="created_at" value="${now}" />
+            <column name="modified_at" value="${now}" />
+            <column name="firstname" value="John" />
+            <column name="lastname" value="Doe" />
+            <column name="email" value="john.doe@sample.com" />
+            <column name="password" value="pass" />
+            <column name="enabled" valueBoolean="true" />
+            <column name="roles" value="ADMIN" />
+        </insert>
+    </changeSet>
+</databaseChangeLog>
