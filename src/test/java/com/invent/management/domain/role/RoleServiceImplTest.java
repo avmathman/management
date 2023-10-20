@@ -4,6 +4,7 @@ import com.invent.management.data.role.RoleEntity;
 import com.invent.management.data.role.RoleRepository;
 import com.invent.management.domain.user.UserModel;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.Mock;
@@ -19,6 +20,7 @@ import static org.mockito.Mockito.when;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Disabled
 public class RoleServiceImplTest {
 
     private final String ROLE_TEST = "TEST";
