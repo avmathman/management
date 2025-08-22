@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
         try {
             return this.userModelMapper.entityToModel(
                     this.repository.save(this.userModelMapper.modelToEntity(userModel)));
-        } catch(DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             log.error("Failed to save user with user email: {} due to {}", userModel.getEmail(), e.getMessage(), e);
             throw new DataIntegrityViolationException("Given email to create already exist. email = " + userModel.getEmail());
         }
@@ -53,20 +53,20 @@ public class UserServiceImpl implements UserService {
         this.roleService.checkMissingRoles(user.getRoles());
 
         UserEntity current = this.repository
-                .findById(user.getId())
-                .orElseThrow(() -> new ItemNotFoundException("User with given id=" + user.getId() + " does not exist!"));
+                .findByIdAndEmail(user.getId(), user.getEmail())
+                .orElseThrow(() -> new ItemNotFoundException("User does not exist with given id=" + user.getId() + " and given email=" + user.getEmail()));
 
         current.setFirstname(user.getFirstname());
         current.setLastname(user.getLastname());
-        current.setEmail(user.getEmail());
         current.setEnabled(user.isEnabled());
         current.setPassword(user.getPassword());
 
-        try{
+        try {
             return this.userModelMapper.entityToModel(this.repository.save(current));
-        } catch(DataIntegrityViolationException e) {
-            log.error("Failed to update user with user email: {} due to {}", user.getEmail(), e.getMessage(), e);
-            throw new DataIntegrityViolationException("Given email to update already exist. email = " + user.getEmail());
+        } catch (DataIntegrityViolationException e) {
+            String msg = String.format("Failed to update user with email: %s due to %s", user.getEmail(), e.getCause().getMessage());
+            log.error(msg);
+            throw new DataIntegrityViolationException(msg);
         }
 
     }

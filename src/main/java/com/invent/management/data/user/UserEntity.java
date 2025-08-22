@@ -49,35 +49,35 @@ public class UserEntity {
     /**
      * The user firstname.
      */
-    @Column(name = "firstname")
+    @Column(name = "firstname", nullable = false)
     @NotNull
     private String firstname;
 
     /**
      * The user lastname.
      */
-    @Column(name = "lastname")
+    @Column(name = "lastname", nullable = false)
     @NotNull
     private String lastname;
 
     /**
      * The user e-mail address.
      */
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     @NotNull
     private String email;
 
     /**
      * The user password.
      */
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     @NotNull
     private String password;
 
     /**
      * Is user enabled in system.
      */
-    @Column(name = "enabled")
+    @Column(name = "enabled", nullable = false)
     @NotNull
     private boolean enabled;
 

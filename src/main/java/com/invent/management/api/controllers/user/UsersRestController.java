@@ -80,9 +80,9 @@ public class UsersRestController {
     public ResponseEntity<UserReadDto> createUser(
             @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user) {
 
-        final UserModel userModel = this.userService.createUser(this.userCreateDtoMapper.dtoToModel(user));
+        final UserModel createdUserModel = this.userService.createUser(this.userCreateDtoMapper.dtoToModel(user));
         
-        final UserReadDto createdUser = this.userReadDtoMapper.modelToDto(this.userService.createUser(userModel));
+        final UserReadDto createdUser = this.userReadDtoMapper.modelToDto(createdUserModel);
 
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
@@ -101,9 +101,11 @@ public class UsersRestController {
     )
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserReadDto> updateUser(
-            @ApiParam(value = "The user JSON", required = true) @RequestBody UserUpdateDto user) {
-        final UserReadDto updatedUser = this.userReadDtoMapper
-                .modelToDto(this.userService.updateUser(this.userUpdateDtoMapper.dtoToModel(user)));
+            @ApiParam(value = "The user JSON", required = true) @RequestBody UserUpdateDto user
+    ) {
+
+        final UserModel userModel = this.userService.updateUser(this.userUpdateDtoMapper.dtoToModel(user));
+        final UserReadDto updatedUser = this.userReadDtoMapper.modelToDto(userModel);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
