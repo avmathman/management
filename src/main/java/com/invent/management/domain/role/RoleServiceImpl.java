@@ -1,12 +1,11 @@
 package com.invent.management.domain.role;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.invent.management.domain.exception.DuplicateItemException;
 import com.invent.management.domain.exception.ItemNotFoundException;
+import com.invent.management.domain.exception.ManagementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -78,34 +77,25 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void checkMissingRoles(Set<RoleModel> roles) {
-        List<String> existing = this.getAllRoles()
-                .stream()
+    public void checkValidatity(List<String> current, List<RoleModel> existing) {
+        Set<String> names = existing.stream()
                 .map(RoleModel::getName)
+                .collect(Collectors.toSet());
+
+        List<String> unknowns = current.stream()
+                .filter(role -> !names.contains(role))
                 .collect(Collectors.toList());
 
-        List<String> missing = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
 
-        for (RoleModel role : roles) {
-            if (!existing.contains(role.getName())) {
-                missing.add(role.getName());
-            }
+        if (!unknowns.isEmpty()) {
+            sb.append("Following roles do not exist: ");
+            sb.append(unknowns.stream().sorted().collect(Collectors.joining(", ")));
+            sb.append(".");
         }
 
-        if (missing.size() > 0) {
-            throw new ItemNotFoundException("There no roles in database. Incorrect roles: " + missing);
-        }
-    }
-
-    @Override
-    public void checkRole(String role) {
-        List<String> existing = this.getAllRoles()
-                .stream()
-                .map(item -> item.getName())
-                .collect(Collectors.toList());
-
-        if (existing.contains(role)) {
-            throw new DuplicateItemException("Given role already exist in database. role = " + role);
+        if (sb.length() > 0) {
+            throw new ManagementException(sb.toString());
         }
     }
 

@@ -81,7 +81,6 @@ public class RolesRestController {
             @ApiParam(value = "Role in JSON", required = true) @RequestBody RoleCreateDto role) {
 
         final RoleModel roleModel = this.roleService.createRole(this.roleCreateDtoMapper.dtoToModel(role));
-
         final RoleReadDto createdRole = this.roleReadDtoMapper.modelToDto(roleModel);
 
         return new ResponseEntity<>(createdRole, HttpStatus.CREATED);

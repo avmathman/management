@@ -63,7 +63,7 @@ public class UserServiceImplTest {
         //Assign
         UserModel userModel = this.userModelMapper.entityToModel(this.userEntity);
         when(userRepository.save(any(UserEntity.class))).thenReturn(this.userEntity);
-        doNothing().when(roleService).checkMissingRoles(userModel.getRoles());
+        doNothing().when(roleService).checkValidatity(userModel.getRoles());
 
         //Act
         UserModel current = service.createUser(userModel);

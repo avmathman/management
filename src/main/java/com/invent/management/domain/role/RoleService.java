@@ -55,18 +55,11 @@ public interface RoleService {
     /**
      * Checks whether role(s) exist.
      *
-     * @param roles - An array of roles
+     * @param current - List of roles
+     * @param existing - List of {@link RoleModel}
      * @throws DuplicateItemException if role with the same name already exists in database.
      */
-    void checkMissingRoles(Set<RoleModel> roles);
-
-    /**
-     * Checks whether role exist.
-     *
-     * @param role - A role to be checked
-     * @throws DuplicateItemException if role with the same name already exists in database.
-     */
-    void checkRole(String role);
+    void checkValidatity(List<String> current, List<RoleModel> existing);
 
     /**
      * Finds roles by names.

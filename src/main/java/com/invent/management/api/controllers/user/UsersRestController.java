@@ -7,6 +7,7 @@ import com.invent.management.api.controllers.user.dto.UserReadDto;
 import com.invent.management.api.controllers.user.dto.UserReadDtoMapper;
 import com.invent.management.api.controllers.user.dto.UserUpdateDto;
 import com.invent.management.api.controllers.user.dto.UserUpdateDtoMapper;
+import com.invent.management.domain.exception.ManagementException;
 import com.invent.management.domain.role.RoleModel;
 import com.invent.management.domain.role.RoleService;
 import com.invent.management.domain.user.UserModel;
@@ -88,6 +89,7 @@ public class UsersRestController {
     public ResponseEntity<UserReadDto> createUser(
             @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user) {
         List<RoleModel> roles = roleService.findByNames(user.getRoles());
+        this.roleService.checkValidatity(user.getRoles(), roles);
 
         UserModel model = this.userCreateDtoMapper.dtoToModel(user);
         model.setRoles(new HashSet<>(roles));
@@ -115,9 +117,10 @@ public class UsersRestController {
             @ApiParam(value = "The user JSON", required = true) @RequestBody UserUpdateDto user
     ) {
         List<RoleModel> roles = roleService.findByNames(user.getRoles());
+        roleService.checkValidatity(user.getRoles(), roles);
+
         UserModel model = this.userUpdateDtoMapper.dtoToModel(user);
         model.setRoles(new HashSet<>(roles));
-
 
         final UserModel userModel = this.userService.updateUser(model);
         final UserReadDto updatedUser = this.userReadDtoMapper.modelToDto(userModel);

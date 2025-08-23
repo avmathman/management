@@ -37,8 +37,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel createUser(UserModel userModel) {
-        this.roleService.checkMissingRoles(userModel.getRoles());
-
         try {
             return this.userModelMapper.entityToModel(
                     this.repository.save(this.userModelMapper.modelToEntity(userModel)));
@@ -50,8 +48,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserModel updateUser(UserModel user) {
-        this.roleService.checkMissingRoles(user.getRoles());
-
         UserEntity current = this.repository
                 .findByIdAndEmail(user.getId(), user.getEmail())
                 .orElseThrow(() -> new ItemNotFoundException("User does not exist with given id=" + user.getId() + " and given email=" + user.getEmail()));
