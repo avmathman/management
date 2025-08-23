@@ -21,6 +21,7 @@ public interface UserCreateDtoMapper extends DtoMapper<UserCreateDto, UserModel>
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "modifiedAt", ignore = true)
+    @Mapping(target = "roles", ignore = true)
     UserModel dtoToModel(UserCreateDto dto);
 
     /**
@@ -29,5 +30,6 @@ public interface UserCreateDtoMapper extends DtoMapper<UserCreateDto, UserModel>
      * @param model - The model object.
      * @return The dto object.
      */
+    @Mapping(target = "roles", ignore = true)
     UserCreateDto modelToDto(UserModel model);
 }

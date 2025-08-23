@@ -2,6 +2,7 @@ package com.invent.management.domain.role;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.invent.management.domain.exception.DuplicateItemException;
@@ -21,8 +22,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Autowired
     public RoleServiceImpl(
-        RoleRepository repository,
-        RoleModelMapper mapper
+            RoleRepository repository,
+            RoleModelMapper mapper
     ) {
         this.repository = repository;
         this.mapper = mapper;
@@ -34,7 +35,7 @@ public class RoleServiceImpl implements RoleService {
             roleModel.setName(roleModel.getName().toUpperCase());
             return this.mapper.entityToModel(
                     this.repository.save(this.mapper.modelToEntity(roleModel)));
-        } catch(DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Given role name to create already exist in database. role = " + roleModel.getName());
         }
     }
@@ -50,7 +51,7 @@ public class RoleServiceImpl implements RoleService {
 
         try {
             return this.mapper.entityToModel(this.repository.save(current));
-        } catch(DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Given role name to update already exist in database. role = " + roleModel.getName());
         }
     }
@@ -77,17 +78,17 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public void checkMissingRoles(List<String> roles) {
+    public void checkMissingRoles(Set<RoleModel> roles) {
         List<String> existing = this.getAllRoles()
                 .stream()
-                .map(item -> item.getName())
+                .map(RoleModel::getName)
                 .collect(Collectors.toList());
 
         List<String> missing = new ArrayList<>();
 
-        for (String role: roles) {
-            if (!existing.contains(role)) {
-                missing.add(role);
+        for (RoleModel role : roles) {
+            if (!existing.contains(role.getName())) {
+                missing.add(role.getName());
             }
         }
 
@@ -106,7 +107,10 @@ public class RoleServiceImpl implements RoleService {
         if (existing.contains(role)) {
             throw new DuplicateItemException("Given role already exist in database. role = " + role);
         }
+    }
 
-
+    @Override
+    public List<RoleModel> findByNames(List<String> names) {
+        return this.mapper.entitiesToModels(this.repository.findByNameIn(names));
     }
 }

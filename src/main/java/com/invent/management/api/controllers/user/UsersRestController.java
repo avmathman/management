@@ -7,6 +7,8 @@ import com.invent.management.api.controllers.user.dto.UserReadDto;
 import com.invent.management.api.controllers.user.dto.UserReadDtoMapper;
 import com.invent.management.api.controllers.user.dto.UserUpdateDto;
 import com.invent.management.api.controllers.user.dto.UserUpdateDtoMapper;
+import com.invent.management.domain.role.RoleModel;
+import com.invent.management.domain.role.RoleService;
 import com.invent.management.domain.user.UserModel;
 import com.invent.management.domain.user.UserService;
 
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashSet;
 import java.util.List;
 
 import io.swagger.annotations.Api;
@@ -38,7 +41,9 @@ import io.swagger.annotations.ApiParam;
         produces = MediaType.APPLICATION_JSON_VALUE
 )
 public class UsersRestController {
+
     private final UserService userService;
+    private final RoleService roleService;
     private final UserCreateDtoMapper userCreateDtoMapper;
     private final UserReadDtoMapper userReadDtoMapper;
     private final UserUpdateDtoMapper userUpdateDtoMapper;
@@ -46,19 +51,22 @@ public class UsersRestController {
     /**
      * Initializes a new {@link UsersRestController} instance.
      *
-     * @param userService - {@link UserService} instance.
+     * @param userService         - {@link UserService} instance.
+     * @param roleService         - {@link RoleService} instance.
      * @param userCreateDtoMapper - {@link UserCreateDtoMapper} instance.
-     * @param userReadDtoMapper - {@link UserReadDtoMapper} instance.
+     * @param userReadDtoMapper   - {@link UserReadDtoMapper} instance.
      * @param userUpdateDtoMapper - {@link UserUpdateDtoMapper} instance.
      */
     @Autowired
     public UsersRestController(
             UserService userService,
+            RoleService roleService,
             UserCreateDtoMapper userCreateDtoMapper,
             UserReadDtoMapper userReadDtoMapper,
             UserUpdateDtoMapper userUpdateDtoMapper
     ) {
         this.userService = userService;
+        this.roleService = roleService;
         this.userCreateDtoMapper = userCreateDtoMapper;
         this.userReadDtoMapper = userReadDtoMapper;
         this.userUpdateDtoMapper = userUpdateDtoMapper;
@@ -79,9 +87,12 @@ public class UsersRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserReadDto> createUser(
             @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user) {
+        List<RoleModel> roles = roleService.findByNames(user.getRoles());
 
-        final UserModel createdUserModel = this.userService.createUser(this.userCreateDtoMapper.dtoToModel(user));
-        
+        UserModel model = this.userCreateDtoMapper.dtoToModel(user);
+        model.setRoles(new HashSet<>(roles));
+
+        final UserModel createdUserModel = this.userService.createUser(model);
         final UserReadDto createdUser = this.userReadDtoMapper.modelToDto(createdUserModel);
 
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
@@ -103,8 +114,12 @@ public class UsersRestController {
     public ResponseEntity<UserReadDto> updateUser(
             @ApiParam(value = "The user JSON", required = true) @RequestBody UserUpdateDto user
     ) {
+        List<RoleModel> roles = roleService.findByNames(user.getRoles());
+        UserModel model = this.userUpdateDtoMapper.dtoToModel(user);
+        model.setRoles(new HashSet<>(roles));
 
-        final UserModel userModel = this.userService.updateUser(this.userUpdateDtoMapper.dtoToModel(user));
+
+        final UserModel userModel = this.userService.updateUser(model);
         final UserReadDto updatedUser = this.userReadDtoMapper.modelToDto(userModel);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
@@ -142,7 +157,7 @@ public class UsersRestController {
         UserModel user = this.userService.getUser(id);
 
         if (user == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         final UserReadDto userDto = this.userReadDtoMapper.modelToDto(user);

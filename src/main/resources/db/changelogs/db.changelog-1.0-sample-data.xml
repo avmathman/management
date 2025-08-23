@@ -6,24 +6,64 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd"
         logicalFilePath="src/main/resources/db/changelogs/db.changelog-1.0-sample-data.xml">
 
-    <changeSet id="av/sample-data-roles" author="Abdurashid Vakhobov" context="sample-data">
-        <insert tableName="roles">
-            <column name="name" value="ADMIN" />
-        </insert>
-        <insert tableName="roles">
-            <column name="name" value="USER" />
-        </insert>
-    </changeSet>
-    <changeSet id="av/sample-data-users" author="Abdurashid Vakhobov" context="sample-data">
+    <changeSet id="seed-user" author="Abdurashid Vakhobov" context="data">
         <insert tableName="users">
-            <column name="created_at" value="${now}" />
-            <column name="modified_at" value="${now}" />
-            <column name="firstname" value="John" />
-            <column name="lastname" value="Doe" />
-            <column name="email" value="john.doe@sample.com" />
-            <column name="password" value="pass" />
-            <column name="enabled" valueBoolean="true" />
-            <column name="roles" value="ADMIN" />
+            <column name="created_at" valueDate="2023-01-01T00:00:00"/>
+            <column name="modified_at" valueDate="2023-01-01T00:00:00"/>
+            <column name="firstname" value="John"/>
+            <column name="lastname" value="Doe"/>
+            <column name="email" value="john.doe@sample.com"/>
+            <column name="password" value="pass"/>
+            <column name="enabled" valueBoolean="true"/>
         </insert>
+
+        <rollback>
+            <delete tableName="users">
+                <where>email = 'john.doe@example.com'</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="seed-role-admin" author="Abdurashid Vakhobov" context="data">
+        <insert tableName="roles">
+            <column name="name" value="ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="USER"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="roles">
+                <where>name IN ('ADMIN', 'USER')</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="assign-role-to-user" author="Abdurashid Vakhobov" context="data">
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            SELECT u.id, r.id
+            FROM users u
+            INNER JOIN roles r
+            ON r.name = 'ADMIN'
+            WHERE u.email = 'john.doe@sample.com';
+        </sql>
+
+        <sql>
+            INSERT INTO user_roles (user_id, role_id)
+            SELECT u.id, r.id
+            FROM users u
+            INNER JOIN roles r
+            ON r.name = 'USER'
+            WHERE u.email = 'john.doe@sample.com';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM user_roles
+                WHERE user_id = (SELECT id FROM users WHERE email = 'john.doe@sample.com')
+                AND role_id = (SELECT id FROM roles WHERE name = 'ADMIN' OR name = 'USER');
+            </sql>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

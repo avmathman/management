@@ -1,6 +1,5 @@
 package com.invent.management.configuration.component;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,15 +17,18 @@ public class CustomUserDetails implements UserDetails {
     private boolean enabled;
     private List<GrantedAuthority> authorities;
 
-    public CustomUserDetails() {}
+    public CustomUserDetails() {
+    }
 
     public CustomUserDetails(UserEntity user) {
         this.username = user.getEmail();
         this.password = user.getPassword();
-        this.enabled = user.isEnabled(); 
-        this.authorities = Arrays.stream(user.getRoles().split(","))
-                                .map(item -> new SimpleGrantedAuthority("ROLE_" + item))
-                                .collect(Collectors.toList());
+        this.enabled = user.isEnabled();
+
+        this.authorities = user.getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName()))
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -63,5 +65,5 @@ public class CustomUserDetails implements UserDetails {
     public boolean isEnabled() {
         return this.enabled;
     }
-    
+
 }

@@ -1,6 +1,7 @@
 package com.invent.management.domain.role;
 
 import java.util.List;
+import java.util.Set;
 
 import com.invent.management.domain.exception.DuplicateItemException;
 import com.invent.management.domain.exception.ItemNotFoundException;
@@ -9,6 +10,7 @@ import com.invent.management.domain.exception.ItemNotFoundException;
  * Provides methods for working with roles.
  */
 public interface RoleService {
+
     /**
      * Creates new role.
      *
@@ -56,7 +58,7 @@ public interface RoleService {
      * @param roles - An array of roles
      * @throws DuplicateItemException if role with the same name already exists in database.
      */
-    void checkMissingRoles(List<String> roles);
+    void checkMissingRoles(Set<RoleModel> roles);
 
     /**
      * Checks whether role exist.
@@ -65,4 +67,12 @@ public interface RoleService {
      * @throws DuplicateItemException if role with the same name already exists in database.
      */
     void checkRole(String role);
+
+    /**
+     * Finds roles by names.
+     *
+     * @param names - List of names.
+     * @return The list of roles.
+     */
+    List<RoleModel> findByNames(List<String> names);
 }

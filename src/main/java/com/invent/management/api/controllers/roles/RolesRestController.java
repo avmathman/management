@@ -46,9 +46,9 @@ public class RolesRestController {
     /**
      * Initializes a new {@link RolesRestController} instance.
      *
-     * @param roleService - {@link RoleService} instance.
+     * @param roleService         - {@link RoleService} instance.
      * @param roleCreateDtoMapper - {@link RoleCreateDtoMapper} instance.
-     * @param roleReadDtoMapper - {@link RoleReadDtoMapper} instance.
+     * @param roleReadDtoMapper   - {@link RoleReadDtoMapper} instance.
      * @param roleUpdateDtoMapper - {@link RoleUpdateDtoMapper} instance.
      */
     @Autowired
@@ -81,7 +81,7 @@ public class RolesRestController {
             @ApiParam(value = "Role in JSON", required = true) @RequestBody RoleCreateDto role) {
 
         final RoleModel roleModel = this.roleService.createRole(this.roleCreateDtoMapper.dtoToModel(role));
-        
+
         final RoleReadDto createdRole = this.roleReadDtoMapper.modelToDto(roleModel);
 
         return new ResponseEntity<>(createdRole, HttpStatus.CREATED);
@@ -140,7 +140,7 @@ public class RolesRestController {
         RoleModel role = this.roleService.getRole(id);
 
         if (role == null) {
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
         final RoleReadDto roleReadDto = this.roleReadDtoMapper.modelToDto(role);

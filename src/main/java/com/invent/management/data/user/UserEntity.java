@@ -1,10 +1,13 @@
 package com.invent.management.data.user;
 
 import java.sql.Timestamp;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.invent.management.data.role.RoleEntity;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -85,5 +88,11 @@ public class UserEntity {
      * The user roles.
      */
     @Column(name = "roles")
-    private String roles;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id")
+    )
+    private Set<RoleEntity> roles = new HashSet<>();
 }

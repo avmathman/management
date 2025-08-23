@@ -1,8 +1,9 @@
 package com.invent.management.domain.user;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
 
+import com.invent.management.domain.role.RoleModel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -58,5 +59,5 @@ public class UserModel {
     /**
      * The user roles.
      */
-    private List<String> roles;
+    private Set<RoleModel> roles;
 }

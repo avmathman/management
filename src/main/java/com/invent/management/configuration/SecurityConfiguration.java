@@ -14,13 +14,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private static final String[] AUTH_WHITE_LIST = {
-        "/v2/api-docs/**",
-        "/v3/api-docs/**",
-        "/configuration/ui",
-        "/swagger-resources/**",
-        "/configuration/security",
-        "/swagger-ui/**",
-        "/webjars/**"
+            "/v2/api-docs/**",
+            "/v3/api-docs/**",
+            "/configuration/ui",
+            "/swagger-resources/**",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**"
     };
 
     @Autowired
@@ -33,12 +33,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/swagger-ui.html").authenticated()
-            .antMatchers("/api/user/**").hasRole("ADMIN")
-            .antMatchers(AUTH_WHITE_LIST).permitAll()
-            .anyRequest().authenticated()
-            .and().formLogin();
+                .authorizeRequests()
+                .antMatchers("/swagger-ui.html").authenticated()
+                .antMatchers("/api/user/**").hasRole("ADMIN")
+                .antMatchers(AUTH_WHITE_LIST).permitAll()
+                .anyRequest().authenticated()
+                .and().formLogin();
     }
 
     @Bean

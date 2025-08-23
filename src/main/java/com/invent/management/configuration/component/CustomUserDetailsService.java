@@ -20,8 +20,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserEntity userEntity = this.userRepository
                 .findByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found, username: " + username));
-        
+
         return new CustomUserDetails(userEntity);
     }
-    
+
 }
