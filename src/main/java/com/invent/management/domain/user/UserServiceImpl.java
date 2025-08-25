@@ -4,12 +4,13 @@ import com.invent.management.data.user.UserEntity;
 import com.invent.management.data.user.UserRepository;
 
 import com.invent.management.domain.exception.ItemNotFoundException;
-import com.invent.management.domain.role.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 /**
@@ -22,24 +23,28 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final UserModelMapper userModelMapper;
-    private final RoleService roleService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
     public UserServiceImpl(
             UserRepository repository,
             UserModelMapper userModelMapper,
-            RoleService roleService
+            PasswordEncoder passwordEncoder
     ) {
         this.repository = repository;
         this.userModelMapper = userModelMapper;
-        this.roleService = roleService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserModel createUser(UserModel userModel) {
         try {
+            String hashedPassword = passwordEncoder.encode(userModel.getPassword());
+            UserEntity entity = this.userModelMapper.modelToEntity(userModel);
+            entity.setPassword(hashedPassword);
+
             return this.userModelMapper.entityToModel(
-                    this.repository.save(this.userModelMapper.modelToEntity(userModel)));
+                    this.repository.save(entity));
         } catch (DataIntegrityViolationException e) {
             log.error("Failed to save user with user email: {} due to {}", userModel.getEmail(), e.getMessage(), e);
             throw new DataIntegrityViolationException("Given email to create already exist. email = " + userModel.getEmail());
@@ -52,10 +57,12 @@ public class UserServiceImpl implements UserService {
                 .findByIdAndEmail(user.getId(), user.getEmail())
                 .orElseThrow(() -> new ItemNotFoundException("User does not exist with given id=" + user.getId() + " and given email=" + user.getEmail()));
 
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+
         current.setFirstname(user.getFirstname());
         current.setLastname(user.getLastname());
         current.setEnabled(user.isEnabled());
-        current.setPassword(user.getPassword());
+        current.setPassword(hashedPassword);
 
         try {
             return this.userModelMapper.entityToModel(this.repository.save(current));
@@ -87,5 +94,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserModel> getAllUsers() {
         return this.userModelMapper.entitiesToModels(this.repository.findAll());
+    }
+
+    @PostConstruct
+    public void init() {
+        log.info("Default user. email: john.doe@sample.com | password: pass");
     }
 }

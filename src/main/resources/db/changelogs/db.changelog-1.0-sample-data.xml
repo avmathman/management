@@ -13,7 +13,7 @@
             <column name="firstname" value="John"/>
             <column name="lastname" value="Doe"/>
             <column name="email" value="john.doe@sample.com"/>
-            <column name="password" value="pass"/>
+            <column name="password" value="$2a$10$dCdkUep4k4oQLIQhWZqrCOVFBj7AxxgUg3YtEZug9b/E1vzRAT2yW"/>
             <column name="enabled" valueBoolean="true"/>
         </insert>
 
