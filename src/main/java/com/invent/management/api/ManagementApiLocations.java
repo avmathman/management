@@ -14,4 +14,9 @@ public class ManagementApiLocations {
      * Path for Role API.
      */
     public static final String ROLE = "/role";
+
+    /**
+     * Path for Authorization and authentication API.
+     */
+    public static final String AUTH = "/auth";
 }
