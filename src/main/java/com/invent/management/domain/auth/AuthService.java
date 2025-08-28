@@ -13,7 +13,7 @@ public interface AuthService {
      * @param authModel - The user to be created in database.
      * @return Existing user {@link UserModel}.
      */
-    UserModel authenticate(AuthModel authModel);
+    String authenticate(AuthModel authModel);
 
     /**
      * Signs-out user.

@@ -8,7 +8,6 @@ import com.invent.management.api.controllers.user.dto.UserReadDto;
 import com.invent.management.api.controllers.user.dto.UserReadDtoMapper;
 import com.invent.management.domain.auth.AuthModel;
 import com.invent.management.domain.auth.AuthService;
-import com.invent.management.domain.user.UserModel;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -50,19 +49,18 @@ public class AuthRestController {
      */
     @ApiOperation(value = "Authorize user")
     @RequestMapping(
-            path = "",
+            path = "/sign-in",
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<UserReadDto> authenticate(
+    public ResponseEntity<String> authenticate(
             @ApiParam(value = "Credentials in JSON", required = true) @RequestBody AuthDto authDto
     ) {
         final AuthModel authModel = authDtoMapper.dtoToModel(authDto);
-        final UserModel userModel = authService.authenticate(authModel);
-        final UserReadDto userReadDto = userReadDtoMapper.modelToDto(userModel);
+        final String token = authService.authenticate(authModel);
 
-        return new ResponseEntity<>(userReadDto, HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
     /**
@@ -73,7 +71,7 @@ public class AuthRestController {
      */
     @ApiOperation(value = "Sign out user")
     @RequestMapping(
-            path = "/logout", // Optional: give a meaningful endpoint path
+            path = "/sign-out", // Optional: give a meaningful endpoint path
             method = RequestMethod.POST,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
