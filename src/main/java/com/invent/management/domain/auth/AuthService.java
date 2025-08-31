@@ -18,8 +18,8 @@ public interface AuthService {
     /**
      * Signs-out user.
      *
-     * @param token - The authenticated user token.
+     * @param jwt - The authenticated user token.
      * @return True if success, False if does not successes.
      */
-    boolean signout(String token);
+    void signout(String jwt);
 }

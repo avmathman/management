@@ -80,7 +80,7 @@ public class AuthRestController {
             @ApiParam(value = "Authenticated token in JSON", required = true)
             @RequestBody SignOutDto dto
     ) {
-        authService.signout(dto.getToken());
+        authService.signout(dto.getJwt());
 
         return ResponseEntity.noContent().build(); // 204 No Content is standard for logout
     }

@@ -18,6 +18,8 @@ import java.io.IOException;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import static com.invent.management.domain.auth.AuthServiceImpl.BLACKLISTED_TOKENS;
+
 @Component
 public class AuthenticationFilter extends OncePerRequestFilter {
 
@@ -45,7 +47,7 @@ public class AuthenticationFilter extends OncePerRequestFilter {
         }
 
         // Validate token and set authentication
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && !BLACKLISTED_TOKENS.containsKey(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
             if (jwtUtil.validateToken(jwtToken, userDetails)) {

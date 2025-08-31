@@ -15,5 +15,5 @@ public class SignOutDto {
     /**
     * Authenticated user token.
     */
-    String token;
+    String jwt;
 }
