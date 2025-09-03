@@ -87,7 +87,8 @@ public class UsersRestController {
     )
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserReadDto> createUser(
-            @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user) {
+            @ApiParam(value = "User in JSON", required = true) @RequestBody UserCreateDto user
+    ) {
         List<RoleModel> roles = roleService.findByNames(user.getRoles());
         this.roleService.checkValidatity(user.getRoles(), roles);
 
