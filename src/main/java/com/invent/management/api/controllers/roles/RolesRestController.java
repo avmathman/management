@@ -2,10 +2,12 @@ package com.invent.management.api.controllers.roles;
 
 import java.util.List;
 
+import com.invent.management.domain.role.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -71,6 +73,7 @@ public class RolesRestController {
      * @return The created role instance.
      */
     @ApiOperation(value = "Create new role")
+    @PreAuthorize("hasRole('" + Roles.ADMIN + "')")
     @RequestMapping(
             path = "",
             method = RequestMethod.POST,
@@ -93,6 +96,7 @@ public class RolesRestController {
      * @return The modified role instance.
      */
     @ApiOperation(value = "Modify a role")
+    @PreAuthorize("hasRole('" + Roles.ADMIN + "')")
     @RequestMapping(
             path = "",
             method = RequestMethod.PUT,
@@ -113,6 +117,7 @@ public class RolesRestController {
      * @param id - The ID of the role to delete.
      */
     @ApiOperation(value = "Delete role")
+    @PreAuthorize("hasRole('" + Roles.ADMIN + "')")
     @RequestMapping(
             path = "/{id}",
             method = RequestMethod.DELETE
@@ -132,6 +137,7 @@ public class RolesRestController {
      * @return the role instance.
      */
     @ApiOperation(value = "Get role by ID")
+    @PreAuthorize("hasAnyRole('" + Roles.ADMIN + "','" + Roles.USER +  "')")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<RoleReadDto> getRole(
@@ -152,6 +158,7 @@ public class RolesRestController {
      * @return The list of role instances.
      */
     @ApiOperation(value = "Get list of roles")
+    @PreAuthorize("hasAnyRole('" + Roles.ADMIN + "','" + Roles.USER +  "')")
     @RequestMapping(
             path = "/all",
             method = RequestMethod.GET
