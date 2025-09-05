@@ -7,9 +7,9 @@ import com.invent.management.api.controllers.user.dto.UserReadDto;
 import com.invent.management.api.controllers.user.dto.UserReadDtoMapper;
 import com.invent.management.api.controllers.user.dto.UserUpdateDto;
 import com.invent.management.api.controllers.user.dto.UserUpdateDtoMapper;
-import com.invent.management.domain.exception.ManagementException;
 import com.invent.management.domain.role.RoleModel;
 import com.invent.management.domain.role.RoleService;
+import com.invent.management.domain.role.Roles;
 import com.invent.management.domain.user.UserModel;
 import com.invent.management.domain.user.UserService;
 
@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -80,6 +81,7 @@ public class UsersRestController {
      * @return The created user instance.
      */
     @ApiOperation(value = "Create new user")
+    @PreAuthorize("hasRole('" + Roles.ADMIN + "')")
     @RequestMapping(
             path = "",
             method = RequestMethod.POST,
@@ -108,6 +110,7 @@ public class UsersRestController {
      * @return The modified user instance.
      */
     @ApiOperation(value = "Modify a user")
+    @PreAuthorize("hasRole('" + Roles.ADMIN + "')")
     @RequestMapping(
             path = "",
             method = RequestMethod.PUT,
@@ -135,6 +138,7 @@ public class UsersRestController {
      * @param id The ID of the user to delete.
      */
     @ApiOperation(value = "Delete user")
+    @PreAuthorize("hasRole('" + Roles.ADMIN + "')")
     @RequestMapping(
             path = "/{id}",
             method = RequestMethod.DELETE
@@ -154,6 +158,7 @@ public class UsersRestController {
      * @return the user instance.
      */
     @ApiOperation(value = "Get user by ID")
+    @PreAuthorize("hasAnyRole('" + Roles.ADMIN + "','" + Roles.USER +  "')")
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<UserReadDto> getUser(

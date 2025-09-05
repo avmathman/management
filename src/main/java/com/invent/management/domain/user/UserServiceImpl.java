@@ -1,5 +1,7 @@
 package com.invent.management.domain.user;
 
+import com.invent.management.data.role.RoleEntity;
+import com.invent.management.data.role.RoleRepository;
 import com.invent.management.data.user.UserEntity;
 import com.invent.management.data.user.UserRepository;
 
@@ -11,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@link UserService} implementation.
@@ -24,16 +28,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final UserModelMapper userModelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public UserServiceImpl(
             UserRepository repository,
             UserModelMapper userModelMapper,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            RoleRepository roleRepository
     ) {
         this.repository = repository;
         this.userModelMapper = userModelMapper;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -63,6 +70,10 @@ public class UserServiceImpl implements UserService {
         current.setLastname(user.getLastname());
         current.setEnabled(user.isEnabled());
         current.setPassword(hashedPassword);
+
+        List<String> roles = user.getRoles().stream().map(item -> item.getName()).collect(Collectors.toList());
+        List<RoleEntity> roleEntities = roleRepository.findByNameIn(roles);
+        current.setRoles(new HashSet<>(roleEntities));
 
         try {
             return this.userModelMapper.entityToModel(this.repository.save(current));
