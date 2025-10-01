@@ -7,6 +7,7 @@ import com.invent.management.api.advices.ApiErrorResponse;
 import com.invent.management.api.controllers.user.dto.UserReadDto;
 import com.invent.management.api.controllers.user.dto.UserCreateDto;
 import com.invent.management.domain.exception.ItemNotFoundException;
+import com.invent.management.domain.role.RoleModel;
 import com.invent.management.domain.user.UserModel;
 import com.invent.management.domain.user.UserService;
 import com.invent.management.utils.RoleUtils;
@@ -20,7 +21,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,8 +61,15 @@ public class CreateUserApiTest {
     public void createUser_createNewUser_returnNewUser() throws Exception {
 
         //Assign
-        List<String> roles = Arrays.asList(TEST_ROLE);
-        UserCreateDto dto = this.userUtils.createDefaultUserCreateDto(roles);
+        List<String> roleList = Arrays.asList(TEST_ROLE);
+
+        RoleModel roleModel = new RoleModel();
+        roleModel.setId(1L);
+        roleModel.setName(TEST_ROLE);
+        Set<RoleModel> roles = new HashSet<>();
+        roles.add(roleModel);
+
+        UserCreateDto dto = this.userUtils.createDefaultUserCreateDto(roleList);
         UserModel model = this.userUtils.createDefaultUserModel(roles);
 
         when(userService.createUser(any())).thenReturn(model);
@@ -88,8 +98,15 @@ public class CreateUserApiTest {
     public void createUser_passRoleNameNotExists_throwsItemNotFoundException() throws Exception {
 
         //Assign
-        List<String> roles = Arrays.asList(TEST_ROLE);
-        UserCreateDto dto = this.userUtils.createDefaultUserCreateDto(roles);
+        List<String> roleList = Arrays.asList(TEST_ROLE);
+
+        RoleModel roleModel = new RoleModel();
+        roleModel.setId(1L);
+        roleModel.setName(TEST_ROLE);
+        Set<RoleModel> roles = new HashSet<>();
+        roles.add(roleModel);
+
+        UserCreateDto dto = this.userUtils.createDefaultUserCreateDto(roleList);
         UserModel model = this.userUtils.createDefaultUserModel(roles);
 
         when(userService.createUser(any())).thenThrow(ItemNotFoundException.class);
@@ -113,8 +130,15 @@ public class CreateUserApiTest {
     public void createUser_passExistingEmail_throwsDataIntegrityViolationException() throws Exception {
 
         //Assign
-        List<String> roles = Arrays.asList(TEST_ROLE);
-        UserCreateDto dto = this.userUtils.createDefaultUserCreateDto(roles);
+        List<String> roleList = Arrays.asList(TEST_ROLE);
+
+        RoleModel roleModel = new RoleModel();
+        roleModel.setId(1L);
+        roleModel.setName(TEST_ROLE);
+        Set<RoleModel> roles = new HashSet<>();
+        roles.add(roleModel);
+
+        UserCreateDto dto = this.userUtils.createDefaultUserCreateDto(roleList);
         UserModel model = this.userUtils.createDefaultUserModel(roles);
 
         when(userService.createUser(any())).thenThrow(DataIntegrityViolationException.class);

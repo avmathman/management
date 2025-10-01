@@ -6,6 +6,7 @@ import com.invent.management.api.ManagementApiLocations;
 import com.invent.management.api.advices.ApiErrorResponse;
 import com.invent.management.api.controllers.user.dto.UserReadDto;
 import com.invent.management.domain.exception.ItemNotFoundException;
+import com.invent.management.domain.role.RoleModel;
 import com.invent.management.domain.user.UserModel;
 import com.invent.management.domain.user.UserService;
 import com.invent.management.utils.RoleUtils;
@@ -17,8 +18,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
@@ -58,7 +59,11 @@ public class GetUserApiTest {
 
         //Assign
         String userId = "1";
-        List<String> roles = Arrays.asList(TEST_ROLE);
+        RoleModel roleModel = new RoleModel();
+        roleModel.setId(1L);
+        roleModel.setName(TEST_ROLE);
+        Set<RoleModel> roles = new HashSet<>();
+        roles.add(roleModel);
         UserModel model = this.userUtils.createDefaultUserModel(roles);
         when(userService.getUser(anyLong())).thenReturn(model);
 

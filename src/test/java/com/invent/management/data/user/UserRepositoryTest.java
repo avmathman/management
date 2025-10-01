@@ -1,7 +1,12 @@
 package com.invent.management.data.user;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
+import com.invent.management.data.role.RoleEntity;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Disabled
 public class UserRepositoryTest {
-
-    private final String ROLE_TEST = "TEST";
 
     @Autowired
     private UserRepository userRepository;
@@ -59,12 +62,18 @@ public class UserRepositoryTest {
         Timestamp timestamp = new Timestamp(1695279144833L);
         UserEntity userEntity = new UserEntity();
 
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setId(1L);
+        roleEntity.setName("TEST");
+        Set<RoleEntity> roles = new HashSet<>();
+        roles.add(roleEntity);
+
         userEntity.setFirstname("Test");
         userEntity.setLastname("Test");
         userEntity.setEmail("test@test.com");
         userEntity.setPassword("pass");
         userEntity.setEnabled(true);
-        userEntity.setRoles(ROLE_TEST);
+        userEntity.setRoles(roles);
         userEntity.setCreatedAt(timestamp);
         userEntity.setModifiedAt(timestamp);
 

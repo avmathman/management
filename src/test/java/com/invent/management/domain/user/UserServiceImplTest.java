@@ -7,11 +7,11 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Consumer;
 
+import com.invent.management.data.role.RoleEntity;
+import com.invent.management.data.role.RoleRepository;
 import com.invent.management.domain.role.RoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -23,6 +23,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import com.invent.management.data.user.UserEntity;
 import com.invent.management.data.user.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,29 +32,27 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Disabled
 public class UserServiceImplTest {
 
-    private final String ROLE_TEST = "TEST";
+    private UserService service;
 
     @Mock
     private UserRepository userRepository;
 
     private UserModelMapper userModelMapper;
-
-    @Mock
-    private RoleService roleService;
-
-    private UserService service;
+    private PasswordEncoder passwordEncoder;
+    private RoleRepository roleRepository;
 
     private UserEntity userEntity;
 
     @BeforeEach
     public void setUp() {
         cleanAll();
+
         userRepository = mock(UserRepository.class);
         userModelMapper = Mappers.getMapper(UserModelMapper.class);
-        roleService = mock(RoleService.class);
+        passwordEncoder = mock(PasswordEncoder.class);
+        roleRepository = mock(RoleRepository.class);
 
-        service = new UserServiceImpl(userRepository, userModelMapper, roleService);
-
+        service = new UserServiceImpl(userRepository, userModelMapper, passwordEncoder, roleRepository);
         userEntity = this.createUserEntity(userEntity -> userEntity.setFirstname("First"));
     }
     
@@ -63,7 +62,7 @@ public class UserServiceImplTest {
         //Assign
         UserModel userModel = this.userModelMapper.entityToModel(this.userEntity);
         when(userRepository.save(any(UserEntity.class))).thenReturn(this.userEntity);
-        doNothing().when(roleService).checkValidatity(userModel.getRoles());
+//        doNothing().when(roleService).checkValidatity(userModel.getRoles());
 
         //Act
         UserModel current = service.createUser(userModel);
@@ -157,12 +156,18 @@ public class UserServiceImplTest {
         Timestamp timestamp = new Timestamp(1695279144833L);
         UserEntity userEntity = new UserEntity();
 
+        RoleEntity roleEntity = new RoleEntity();
+        roleEntity.setId(1L);
+        roleEntity.setName("TEST");
+        Set<RoleEntity> roles = new HashSet<>();
+        roles.add(roleEntity);
+
         userEntity.setId(1L);
         userEntity.setLastname("Lastname");
         userEntity.setEmail("test@test.com");
         userEntity.setPassword("pass");
         userEntity.setEnabled(true);
-        userEntity.setRoles(ROLE_TEST);
+        userEntity.setRoles(roles);
         userEntity.setCreatedAt(timestamp);
         userEntity.setModifiedAt(timestamp);
 

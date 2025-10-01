@@ -1,9 +1,11 @@
 package com.invent.management.utils;
 
 import com.invent.management.api.controllers.user.dto.UserCreateDto;
+import com.invent.management.domain.role.RoleModel;
 import com.invent.management.domain.user.UserModel;
 
 import java.util.List;
+import java.util.Set;
 
 public class UserUtils {
     public UserCreateDto createDefaultUserCreateDto() {
@@ -23,7 +25,7 @@ public class UserUtils {
         return dto;
     }
 
-    public UserModel createDefaultUserModel(List<String> roles) {
+    public UserModel createDefaultUserModel(Set<RoleModel> roles) {
         UserModel model = new UserModel();
 
         model.setId(1L);
