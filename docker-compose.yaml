@@ -1,0 +1,40 @@
+version: '3.8'
+
+networks:
+  backend:
+    driver: bridge
+
+services:
+  management-mysql:
+    image: mysql:8.0
+    container_name: mysql
+    hostname: management-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: management
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+
+  management-app:
+    build:
+      context: .
+    container_name: management-app
+    depends_on:
+      - management-mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://management-mysql:3306/management
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      MYSQL_HOST: management-mysql
+    ports:
+      - "8080:8080"
+    networks:
+      - backend
+
+volumes:
+  mysql_data:

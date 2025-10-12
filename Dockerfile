@@ -1,12 +1,26 @@
+# ---- Build Stage ----
 FROM gradle:7.6.3-jdk8 as builder
 
+# Set working directory
+WORKDIR /usr/app
+
+# Copy only necessary files first (for caching)
+COPY build.gradle settings.gradle* gradle.properties* /usr/app/
+
+# Copy source code
 COPY src /usr/app/src
-COPY build.gradle /usr/app
 
-RUN gradle -b /usr/app/build.gradle build
+# Run Gradle build (no daemon, no tests)
+RUN gradle build -x test --no-daemon
 
+# ---- Runtime Stage ----
 FROM openjdk:8u102-jdk
 
-COPY --from=builder /usr/app/build/libs/*.jar /usr/app/management.jar
+# Create app directory
+WORKDIR /usr/app
 
+# Copy the built jar from the builder stage
+COPY --from=builder /usr/app/build/libs/*.jar management.jar
+
+# Set the entrypoint
 ENTRYPOINT ["java","-jar","/usr/app/management.jar"]
