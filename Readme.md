@@ -54,3 +54,10 @@ Running through Docker
 ## Usage <a name = "usage"></a>
 
 There are APIs which split into two groups. These groups are <b>User</b> and <b>Role</b>.
+
+## Sample User on Startup
+
+A default user is seeded for testing:
+
+- **Email:** john.doe@sample.com
+- **Password:** password
